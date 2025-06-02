@@ -1,9 +1,59 @@
-*/__pycache__/*
-*.pyc
-*.pyo
-*.pyd
-*.db
-
-.idea/*
-.env
+# OS files
 .DS_Store
+*.swp
+*.swo
+Thumbs.db
+
+# IDE/Editor files
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+out/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.python-version
+*.egg-info/
+.eggs/
+*.egg
+.env/
+.venv/
+venv/
+ENV/
+
+# Database
+*.db
+*.sqlite3
+*.sqlite
+
+# Coverage reports
+coverage/
+.coverage
+htmlcov/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
