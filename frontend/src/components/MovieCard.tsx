@@ -33,10 +33,7 @@ export function MovieCard({ movie, onEdit, onDelete }: MovieCardProps) {
     <div className="p-0 m-0">
       {movie.video_path && (
         <div className="p-0 m-0">
-          <VideoPlayer
-            src={movieApi.getVideoUrl(movie.id)}
-            type={movie.video_type}
-          />
+          <VideoPlayer movie={movie} />
         </div>
       )}
 

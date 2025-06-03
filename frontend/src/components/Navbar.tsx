@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
+import { usePinnedVideos } from '@/lib/context/PinnedVideosContext';
 
 interface NavbarProps {
   onSearch: (query: string) => void;
@@ -7,6 +9,7 @@ interface NavbarProps {
 
 export function Navbar({ onSearch }: NavbarProps) {
   const [searchQuery, setSearchQuery] = useState('');
+  const { pinnedVideos } = usePinnedVideos();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,7 +25,22 @@ export function Navbar({ onSearch }: NavbarProps) {
     <nav className="bg-white shadow-sm">
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold text-gray-900">Movie App</h1>
+          <div className="flex items-center space-x-8">
+            <Link href="/movies" className="text-xl font-bold text-gray-900">
+              Movie App
+            </Link>
+            <Link
+              href="/movies/pins"
+              className="flex items-center space-x-1 text-sm font-medium text-gray-700 hover:text-indigo-600"
+            >
+              <span>Pinned Videos</span>
+              {pinnedVideos.length > 0 && (
+                <span className="inline-flex items-center justify-center w-5 h-5 text-xs font-medium text-white bg-indigo-600 rounded-full">
+                  {pinnedVideos.length}
+                </span>
+              )}
+            </Link>
+          </div>
           
           <form onSubmit={handleSubmit} className="flex-1 max-w-lg mx-4">
             <div className="relative">
