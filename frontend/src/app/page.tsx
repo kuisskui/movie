@@ -6,6 +6,7 @@ import { Movie } from '@/lib/api';
 import { MovieCard } from '@/components/MovieCard';
 import { MovieForm } from '@/components/MovieForm';
 import { Dialog } from '@headlessui/react';
+import { Navbar } from '@/components/Navbar';
 
 export default function Home() {
   const { data: movies, isLoading } = useMovies();
@@ -15,6 +16,7 @@ export default function Home() {
 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState<Movie | undefined>();
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleSubmit = async (data: any) => {
     try {
@@ -45,6 +47,16 @@ export default function Home() {
     }
   };
 
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
+  const filteredMovies = movies?.filter((movie) =>
+    movie.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    movie.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    movie.genre?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -54,53 +66,56 @@ export default function Home() {
   }
 
   return (
-    <main className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Movies</h1>
-        <button
-          onClick={() => {
-            setSelectedMovie(undefined);
-            setIsOpen(true);
-          }}
-          className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-        >
-          Add Movie
-        </button>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {movies?.map((movie) => (
-          <MovieCard
-            key={movie.id}
-            movie={movie}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
-        ))}
-      </div>
-
-      <Dialog
-        open={isOpen}
-        onClose={() => {
-          setIsOpen(false);
-          setSelectedMovie(undefined);
-        }}
-        className="relative z-50"
-      >
-        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-        <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Dialog.Panel className="mx-auto max-w-lg rounded bg-white p-6 w-full">
-            <Dialog.Title className="text-lg font-medium leading-6 text-gray-900 mb-4">
-              {selectedMovie ? 'Edit Movie' : 'Add Movie'}
-            </Dialog.Title>
-            <MovieForm
-              initialData={selectedMovie}
-              onSubmit={handleSubmit}
-              isSubmitting={createMovie.isPending || updateMovie.isPending}
-            />
-          </Dialog.Panel>
+    <>
+      <Navbar onSearch={handleSearch} />
+      <main className="container mx-auto px-4 py-8">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Movies</h1>
+          <button
+            onClick={() => {
+              setSelectedMovie(undefined);
+              setIsOpen(true);
+            }}
+            className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          >
+            Add Movie
+          </button>
         </div>
-      </Dialog>
-    </main>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredMovies?.map((movie) => (
+            <MovieCard
+              key={movie.id}
+              movie={movie}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+          ))}
+        </div>
+
+        <Dialog
+          open={isOpen}
+          onClose={() => {
+            setIsOpen(false);
+            setSelectedMovie(undefined);
+          }}
+          className="relative z-50"
+        >
+          <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+          <div className="fixed inset-0 flex items-center justify-center p-4">
+            <Dialog.Panel className="mx-auto max-w-lg rounded bg-white p-6 w-full">
+              <Dialog.Title className="text-lg font-medium leading-6 text-gray-900 mb-4">
+                {selectedMovie ? 'Edit Movie' : 'Add Movie'}
+              </Dialog.Title>
+              <MovieForm
+                initialData={selectedMovie}
+                onSubmit={handleSubmit}
+                isSubmitting={createMovie.isPending || updateMovie.isPending}
+              />
+            </Dialog.Panel>
+          </div>
+        </Dialog>
+      </main>
+    </>
   );
 }
