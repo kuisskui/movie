@@ -1,5 +1,7 @@
-import { Movie } from '@/lib/api';
-import { StarIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
+import { Movie, movieApi } from '@/lib/api';
+import { StarIcon, PencilIcon, TrashIcon, VideoCameraIcon } from '@heroicons/react/24/solid';
+import { VideoPlayer } from './VideoPlayer';
+import { useState } from 'react';
 
 interface MovieCardProps {
   movie: Movie;
@@ -8,6 +10,25 @@ interface MovieCardProps {
 }
 
 export function MovieCard({ movie, onEdit, onDelete }: MovieCardProps) {
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleVideoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setIsUploading(true);
+      await movieApi.uploadVideo(movie.id, file);
+      // Refresh the page or update the movie state to show the video
+      window.location.reload();
+    } catch (error) {
+      console.error('Failed to upload video:', error);
+      alert('Failed to upload video');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <div className="p-6">
@@ -26,11 +47,32 @@ export function MovieCard({ movie, onEdit, onDelete }: MovieCardProps) {
             >
               <TrashIcon className="h-5 w-5" />
             </button>
+            {!movie.video_path && (
+              <label className="cursor-pointer text-gray-400 hover:text-blue-500">
+                <VideoCameraIcon className="h-5 w-5" />
+                <input
+                  type="file"
+                  accept="video/*"
+                  className="hidden"
+                  onChange={handleVideoUpload}
+                  disabled={isUploading}
+                />
+              </label>
+            )}
           </div>
         </div>
 
         {movie.description && (
           <p className="mt-2 text-gray-600 line-clamp-2">{movie.description}</p>
+        )}
+
+        {movie.video_path && (
+          <div className="mt-4">
+            <VideoPlayer
+              src={movieApi.getVideoUrl(movie.id)}
+              type={movie.video_type}
+            />
+          </div>
         )}
 
         <div className="mt-4 flex items-center justify-between">

@@ -16,6 +16,8 @@ export interface Movie {
   rating?: number;
   release_year?: number;
   genre?: string;
+  video_path?: string;
+  video_type?: string;
 }
 
 export interface MovieCreate {
@@ -32,6 +34,8 @@ export interface MovieUpdate {
   rating?: number;
   release_year?: number;
   genre?: string;
+  video_path?: string;
+  video_type?: string;
 }
 
 export const movieApi = {
@@ -57,5 +61,25 @@ export const movieApi = {
 
   delete: async (id: number) => {
     await api.delete(`/movies/${id}`);
+  },
+
+  uploadVideo: async (movieId: number, videoFile: File) => {
+    const formData = new FormData();
+    formData.append('video', videoFile);
+
+    const response = await axios.post(
+      `${baseURL}/movies/${movieId}/upload`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+    return response.data;
+  },
+
+  getVideoUrl: (movieId: number) => {
+    return `${baseURL}/movies/${movieId}/video`;
   },
 }; 

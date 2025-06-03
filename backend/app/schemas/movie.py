@@ -8,6 +8,8 @@ class MovieBase(BaseModel):
     rating: Optional[float] = None
     release_year: Optional[int] = None
     genre: Optional[str] = None
+    video_path: Optional[str] = None
+    video_type: Optional[str] = None
 
 
 class MovieCreate(MovieBase):
@@ -20,6 +22,8 @@ class MovieUpdate(BaseModel):
     rating: Optional[float] = None
     release_year: Optional[int] = None
     genre: Optional[str] = None
+    video_path: Optional[str] = None
+    video_type: Optional[str] = None
 
 
 class Movie(MovieBase):
