@@ -1,26 +1,29 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import Navbar from "@/components/Navbar";
 import "./globals.css";
-import { Providers } from "./providers";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Movie App",
   description: "A simple movie management application",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children, }: { children: React.ReactNode; }) {
+
+  const handleSearch = (query: string) => {
+  };
+
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <Providers>
+      <body>
+
+        <nav className="bg-white shadow-sm">
+          <Navbar onSearch={handleSearch} />
+        </nav>
+
+        <main className="container mx-auto my-auto">
           {children}
-        </Providers>
+        </main>
+
       </body>
     </html>
   );
