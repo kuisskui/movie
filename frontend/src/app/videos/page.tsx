@@ -1,6 +1,7 @@
 "use client"
 import VideoPlayer from '@/components/VideoPlayer';
 import videos from '@/data';
+import VideoGallery from '@/components/VideoGallery';
 import { useSearchParams } from 'next/navigation';
 
 export default function Home() {
@@ -13,8 +14,9 @@ export default function Home() {
   }
 
   return (
-    <div className="container mx-auto my-auto">
+    <div className="container py-2">
       <VideoPlayer src={video.src} />
+      <VideoGallery/>
     </div>
   );
 }
