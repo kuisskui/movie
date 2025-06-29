@@ -14,8 +14,8 @@ export default function Home() {
   }
 
   return (
-    <div className="container py-2">
-      <VideoPlayer src={video.src} />
+    <div className="container flex flex-col gap-2">
+      <VideoPlayer title={video.title} likes={video.likes} views={video.views} src={video.src} />
       <VideoGallery/>
     </div>
   );

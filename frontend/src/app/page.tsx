@@ -3,7 +3,7 @@ import VideoGallery from "@/components/VideoGallery";
 export default function Home() {
 
   return (
-    <div className="container py-2">
+    <div className="container">
       <VideoGallery/>
     </div>
   );
